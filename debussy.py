@@ -1,0 +1,163 @@
+# Generates a small section of Claude Debussy's La Fille aux Cheveux de lin
+# By Walter Liu
+
+import music21 as m
+from music21.note import Note as n
+from music21.chord import Chord as c
+from music21.note import Rest as r
+from music21.duration import Duration as d
+from copy import deepcopy as cp
+from music21.tie import Tie as t
+
+S = "start"
+C = "continue"
+X = "stop"
+
+
+la = m.stream.Score()
+ts = m.meter.TimeSignature("3/4")
+ks = m.key.KeySignature(-6)
+tmp = m.tempo.MetronomeMark(number=60)
+la.append(ts)
+la.append(tmp)
+
+lh = m.stream.Part()
+lcl = m.clef.BassClef()
+lh.append(lcl)
+lh.append(ts)
+lh.append(ks)
+lh.append(tmp)
+re = r(duration=d(3))
+lh.append(re)
+re = r(duration=d(2.5))
+lh.append(re)
+ch = c(["C-3", "E-3"])
+ch.duration = d(0.5)
+lh.append(ch)
+ch = c(["G-2", "D-3"])
+ch.duration = d(5)
+lh.append(ch)
+re = r(duration=d(1))
+lh.append(re)
+ch = c(["D-3", "A-3"])
+ch.duration = d(3/2)
+lh.append(ch)
+ch = c(["B-2", "F3", "B-3"])
+ch.duration = d(1/2)
+lh.append(ch)
+ch = c(["E-3", "B-3"])
+ch.duration = d(1/2)
+lh.append(ch)
+ch = c(["G-3", "B-3"])
+ch.duration = d(1/2)
+lh.append(ch)
+ch = c(["D-3", "A-3"])
+ch.duration = d(1)
+lh.append(ch)
+ch = c(["B-2", "F3", "B-3"])
+ch.duration = d(1)
+lh.append(ch)
+ch = c(["E-2", "B-2", "G3", "B-3"])
+ch.duration = d(2)
+lh.append(ch)
+re = r(duration=d(2))
+lh.append(re)
+
+
+
+
+rh = m.stream.Part()
+rcl = m.clef.TrebleClef()
+rh.append(ts)
+rh.append(rcl)
+rh.append(tmp)
+rh.append(ks)
+ndb515 = n("D-5", duration=d(3/2))
+rh.append(ndb515)
+nbb4025 = n("B-4", duration=d(1/4))
+rh.append(nbb4025)
+ngb4025 = n("G-4", duration=d(1/4))
+rh.append(ngb4025)
+neb405 = n("E-4", duration=d(1/2))
+rh.append(neb405)
+rh.append(cp(ngb4025))
+rh.append(cp(nbb4025))
+ndb505 = n("D-5", duration=d(1/2))
+rh.append(cp(ndb505))
+rh.append(cp(nbb4025))
+rh.append(cp(ngb4025))
+rh.append(cp(neb405))
+rh.append(cp(ngb4025))
+rh.append(cp(nbb4025))
+ngb405 = n("G-4", duration=d(1/2))
+rh.append(cp(ngb405))
+ch = c(["G-3", "C-4", "G-4"])
+ch.duration = d(1/4)
+rh.append(ch)
+neb4025 = n("E-4", duration=d(1/4))
+rh.append(cp(neb4025))
+ch = c(["G-3", "B-3", "G-4"])
+ch.duration = d(1/2)
+ch[0].tie = t(S)
+ch[1].tie = t(S)
+rh.append(ch)
+ch = c(["G-3", "B-3", "F4"])
+ch.duration = d(1/4)
+ch[0].tie = t(C)
+ch[1].tie = t(C)
+rh.append(ch)
+ch = c(["G-3", "B-3", "E-4"])
+ch.duration = d(1/4)
+ch[0].tie = t(C)
+ch[1].tie = t(C)
+rh.append(ch)
+ch = c(["G-3", "B-3", "D-4"])
+ch.duration = d(4)
+ch[0].tie = t(X)
+ch[1].tie = t(X)
+rh.append(ch)
+rh.append(cp(neb405))
+rh.append(cp(ngb405))
+ch = c(["D-4", "F4", "A-4"])
+ch.duration = d(3/2)
+rh.append(ch)
+ch = c(["D-4", "F4", "D-5"])
+ch.duration = d(1/2)
+rh.append(ch)
+ch = c(["E-4", "G-4", "B-4"])
+ch.duration = d(1/2)
+rh.append(ch)
+ch = c(["D-4", "G-4"])
+ch.duration = d(1/4)
+rh.append(ch)
+ch = c(["G-4", "B-4"])
+ch.duration = d(1/4)
+rh.append(ch)
+ch = c(["D-4", "F4", "A-4"])
+ch.duration = d(1/2)
+rh.append(ch)
+rh.append(cp(ndb505))
+ch = c(["D4", "F4", "B-4"])
+ch.duration = d(1)
+rh.append(ch)
+ch = c(["E-4", "B-4", "E-5"])
+ch.duration = d(2)
+rh.append(ch)
+nbb515 = n("B-4",duration=d(3/2))
+rh.append(nbb515)
+ncb505 = n("C-5", duration=d(1/2), offset=0)
+rh.append(ncb505)
+
+rh.offset = 0
+lh.offset = 0
+
+print(rh.offset, lh.offset)
+
+la.append(rh)
+la.append(lh)
+
+la.parts[0].offset = 0
+la.parts[1].offset = 0
+
+from score_to_img import main
+main(la, "C:/users/walte/desktop/lafille.png")

@@ -1,0 +1,7 @@
+music21
+matplotlib
+opencv-python
+torch
+torchvision
+numpy
+transformers
