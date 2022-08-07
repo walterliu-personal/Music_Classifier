@@ -19,3 +19,6 @@ __pycache__
 .git
 /.git
 **/.git
+music_classifier_model.pt
+/music_classifier_model.pt
+**/music_classifier_model.pt
